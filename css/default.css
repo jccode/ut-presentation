@@ -173,20 +173,27 @@ p.footer { font-size: 0.7em; text-align: right; margin-top: 4em; }
 
 /* overview step */
 
-#overview {
-  z-index: -1;
-  padding: 0;
-  /* background: rgba(255, 255, 255, 0.5); */
-  height: 10px;
-}
+/* #overview { */
+/*   z-index: -1; */
+/*   padding: 0; */
+/*   /\* background: rgba(255, 255, 255, 0.5); *\/ */
+/*   height: 10px; */
+/* } */
 
 /* on overview step everything is visible */
 
-#impress.step-overview .step {
-  opacity: 1;
-  cursor: pointer;
-}
+/* #impress.step-overview .step { */
+/*   opacity: 1; */
+/*   cursor: pointer; */
+/* } */
 
+
+#overview { display: none }
+
+.impress-on-overview .step {
+    opacity: 1;
+    cursor: pointer;
+}
 
 /* IMPRESS NOT SUPPORTED STYLES */
 
@@ -318,4 +325,18 @@ div.abs-box > :not(.base) {
 
 .impress-not-supported .hint {
   display: none;
+}
+
+a.lightbox {
+    display: block;
+    text-align: center;
+    position: relative;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.m-t-m {
+    margin-top: 1.5em;
 }

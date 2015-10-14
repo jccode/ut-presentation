@@ -13,6 +13,7 @@
 
     <link href="css/default.css" rel="stylesheet" />
     <link href="libs/highlight/styles/sunburst.css" rel="stylesheet" />
+    <link href="libs/lightbox/css/lightbox.css" rel="stylesheet" />
     <link rel="shortcut icon" href="favicon.png" />
     <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 </head>
@@ -41,16 +42,264 @@
         <h2>为什么单测?</h2>
     </div>
 
-    <div id="code" class="step">
-        <p>Node.js introduced the following convention:</p>
-        <pre><code>readFile(filename, function (err, content) {
-        if (err) {
-        // handle error
-        return;
-        }
-        // process file content
-        });</code></pre>
+    <div id="outline" class="step">
+        <h2>大纲</h2>
+        <ul>
+            <li>开发流程</li>
+            <li>Jasmine</li>
+            <li>案例</li>
+        </ul>
     </div>
+
+    <div id="project_struture" class="step">
+        <h3>项目结构</h3>
+        <a href="img/project_struture.png" data-lightbox="project struture" class="lightbox">
+            <img src="img/project_struture.png" class="img" alt="项目结构" style="height:500px;"/>
+        </a>
+    </div>
+
+    <div id="how_to_run" class="step">
+        <h1>如何运行单元测试?</h1>
+    </div>
+
+    <div id="run_cmd" class="step">
+        <h3>运行测试</h3>
+        <p class="substep">两种模式</p>
+        <ul>
+            <li>发布模式: 适合于发布前和入库前</li>
+            <li>开发模式: 适合于开发,自动加载单元测试</li>
+        </ul>
+    </div>
+
+    <div id="run_cmd_release" class="step">
+        <h3>发布模式</h3>
+        <p>适合于发布前和入库前</p>
+        <pre><code>
+            grunt ut
+        </code></pre>
+        <a href="img/grunt_ut.png" data-lightbox="grunt ut" class="lightbox">
+            <img src="img/grunt_ut.png" alt="grunt ut" style="height:350px;" />
+        </a>
+    </div>
+
+    <div id="run_cmd_dev" class="step">
+        <h3>开发模式</h3>
+        <small>适合于开发,自动加载单元测试</small>
+        <pre><code>
+            grunt
+        </code></pre>
+    </div>
+
+    <div id="jasmine" class="step">
+        <h2>Jasmine</h2>
+        <p class="text-center">一个简易的BDD JS测试框架</p>
+    </div>
+
+    <div id="jasmine_code_structure" class="step">
+        <h3>Jasmine测试用例的整体结构</h3>
+        <pre><code>describe("Demo suite", function() {
+
+         it("contains spec with an expectation", function() {
+             expect(true).toBe(true);
+         });
+
+         it('works for underscore', function() {
+             expect(_.size([1,2,3])).toEqual(3);
+         });
+
+     });
+        </code></pre>
+    </div>
+
+    <div id="ex1" class="step">
+        <h3>典型ajax请求的例子</h3>
+        <p>ajax请求从服务器获取数据后,渲染列表</p>
+        
+        <pre><code>&lt;ul id="list">&lt;/ul&gt;</code></pre>
+        
+        <pre><code>    function render(data) {
+          var content = '';
+          $.each(data, function(i, n) {
+              content += "&lt;li>n&lt;/li>";
+          });
+          $("#list").html(content);
+     }
+
+     function getList() {
+         $.getJSON("/api/list", {}, function(data) {
+             render(data);
+         });
+     }
+        </code></pre>
+    </div>
+
+    <div id="ex1_q" class="step">
+        <h2>Ajax请求如何测试?</h2>
+    </div>
+
+    <div id="principle" class="step">
+        <p class="text-center">前端单测 <br />
+        只测试前端逻辑的正确性 <br />
+        而不对接口返回数据负责</p>
+    </div>
+
+    <div id="ex1_ajax_test" class="step">
+        <pre><code>    function getList() {
+         $.getJSON("/api/list", {}, function(data) {
+             render(data);
+         });
+     }
+        </code></pre>
+        <p class="m-t-m">测试代码</p>
+        <pre><code>    it("getList should send request to remote server", function() {
+         spyOn($, "getJSON");
+         getList();
+         expect($.getJSON).toHaveBeenCalled();
+     });
+        </code></pre>
+    </div>
+
+    <div id="ex1_dom_test" class="step">
+        <h3>业务逻辑的测试, DOM测试</h3>
+        <pre><code>    function render(data) {
+          var content = '';
+          $.each(data, function(i, n) {
+              content += "&lt;li>n&lt;/li>";
+          });
+          $("#list").html(content);
+     }
+        </code></pre>
+        <p class="m-t-m">测试代码 </p>
+        <pre><code>    it("should render dom elements correctly", function() {
+         var ul = $('&lt;ul id="list">&lt;/ul>');
+         expect(ul.children("li").size()).toEqual(0);
+         var data = ["Tomorrow", "is", "another", "day"];
+         render(data);
+         expect(ul.children("li").size()).toEqual(4);
+     });
+        </code></pre>
+    </div>
+
+    <div id="pratice-intro" class="step">
+        <h3>练习</h3>
+        <a href="img/zhengdianjing.png" data-lightbox="zhengdianjin" class="lightbox">
+            <img src="img/zhengdianjing.png" alt="整点金倒计时" />
+        </a>
+    </div>
+
+    <div id="pratice-intro2" class="step">
+        <pre><code>    // 倒计时
+    function countDown(begin, end, fn) {
+        var remain = end.getTime() - begin.getTime();
+        var timer = setInterval(function () {
+            remain -= 1000;
+            fn(remain);
+        }, 1000);
+        return timer;
+    }
+
+    // 将时间切割为: 天,时,分,秒; 用于倒计时
+    function splitTime(millisecond) {
+        var second = millisecond / 1000; // 秒
+        var d = Math.floor(second / 60 / 60 / 24),
+            h = Math.floor(second / 60 / 60 % 24),
+            m = Math.floor(second / 60 % 60),
+            s = Math.floor(second % 60);
+        return {
+            d: d, h: h, m: m, s: s
+        };
+    } 
+        </code></pre>
+    </div>
+
+    <div id="pratice-1" class="step">
+        <pre><code>    /**
+     * 将时间切割为: 天,时,分,秒; 用于倒计时
+     */
+    function splitTime(millisecond) {
+        var second = millisecond / 1000; // 秒
+        var d = Math.floor(second / 60 / 60 / 24),
+            h = Math.floor(second / 60 / 60 % 24),
+            m = Math.floor(second / 60 % 60),
+            s = Math.floor(second % 60);
+        return {
+            d: d, h: h, m: m, s: s
+        };
+    } 
+        </code></pre>
+        <p>测试代码</p>
+        <pre><code>     it("splitTime should works", function() {
+            var r = c.splitTime(1000 * 10 + 1000 * 60 * 3);
+            expect(r.d).toEqual(0);
+            expect(r.h).toEqual(0);
+            expect(r.m).toEqual(3);
+            expect(r.s).toEqual(10);
+        });
+        </code></pre>
+    </div>
+
+    <div id="how-test-time" class="step">
+        <h2>时间如何测试?</h2>
+    </div>
+
+    <div id="jasmine-clock" class="step">
+        <h3>jasmine clock</h3>
+        <pre><code>  beforeEach(function() {
+    jasmine.clock().install();
+  });
+        </code></pre>
+        <pre><code>  afterEach(function() {
+    jasmine.clock().uninstall();
+  });
+        </code></pre>
+        <pre><code>jasmine.clock().tick(1000);</code></pre>
+    </div>
+
+    <div id="pratice-2" class="step">
+        <a href="img/count_down.png" data-lightbox="count_down" class="lightbox">
+            <img src="img/count_down.png" alt="count down" />
+        </a>
+        <p>测试代码</p>
+        <a href="img/jasmine_clock_test.png" data-lightbox="clock test" class="lightbox">
+            <img src="img/jasmine_clock_test.png" alt="jasmine clock test" />
+        </a>
+    </div>
+
+    <div id="case_study" class="step">
+        <h2>案例学习</h2>
+        <p class="text-center">注册登陆模块的单测例子</p>
+    </div>
+
+    <div id="ex2_test" class="step">
+        <pre><code>    describe("login module spec suit", function() {
+
+        beforeEach(function(done) {
+            m.initialize('', {
+                redirectUrl: 'abc'
+            });
+            setTimeout(function() {
+                done();
+            }, 100);
+        });
+
+        it("click on aggrement button should goto relavant page", function() {
+            $("#aggrement").click();
+            expect(window.location.href.endsWith("#register/agreement")).toBeTruthy();
+        });
+
+    }); 
+        </code></pre>
+    </div>
+
+    <div id="question" class="step">
+        <h2>Question?</h2>
+    </div>
+
+    <div id="thx" class="step">
+        <h2>Thank you !</h2>
+    </div>
+
+    <div id="overview" class="step"></div>
     
 </div>
 
@@ -66,6 +315,7 @@ if ("ontouchstart" in document.documentElement) {
 
 <script src="js/impress.js"></script>
 <script src="libs/highlight/highlight.pack.js"></script>
+<script src="libs/lightbox/js/lightbox-plus-jquery.min.js"></script>
 <script src="js/bootstrap.js"></script>
 
 
