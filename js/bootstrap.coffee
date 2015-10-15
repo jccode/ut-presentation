@@ -4,8 +4,9 @@
 
 dx = 1500
 dy = 1000
-dz = 500
+dz = 1000
 delta_x = 500
+delta_z = 100
 
 steps =
 	"welcome":
@@ -24,7 +25,7 @@ steps =
 
 	"principle":
 		x: -2*dx
-		y: 2*dy
+		y: 3*dy
 		scale: 4
 		
 	"project_struture":
@@ -98,7 +99,26 @@ steps =
 	"ex2_test":
 		x: dx
 		y: 2*dy
-		
+
+	"when":
+		x: 0
+		y: 3*dy
+		scale: 3
+	"when_answer":
+		x: dx
+		y: 3*dy
+		z: - delta_z
+		"rotate-y": 90
+	"if_loaf":
+		x: 0
+		y: 3*dy
+		z: -2* delta_z
+		"rotate-y": 180
+	"terms":
+		x: 2*dx
+		y: 3*dy
+		scale: 4
+			
 	"question":
 		x: 4*dx
 		y: dy
